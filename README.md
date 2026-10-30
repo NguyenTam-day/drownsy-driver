@@ -1,64 +1,33 @@
-# Nerd Fonts
+1. Mở dự án
 
-This is an archived font from the Nerd Fonts release v3.4.0.
+Giải nén file ZIP, mở thư mục dự án bằng VS Code. Mở Terminal và chuyển vào thư mục chứa chương trình:
 
-For more information see:
-* https://github.com/ryanoasis/nerd-fonts/
-* https://github.com/ryanoasis/nerd-fonts/releases/latest/
+cd .\drownsy-detect
 
-# Hasklig
+2. Tạo và kích hoạt môi trường ảo
 
-Font with ligatures for programming (in Haskell) forked from [Source Code Pro](https://github.com/adobe-fonts/source-code-pro).
+Chỉ cần tạo môi trường ảo ở lần đầu tiên:
 
-For more information have a look at the upstream website: https://github.com/i-tu/Hasklig
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
 
-Version: 1.2
+Nếu PowerShell chặn chạy script, nhập lệnh sau rồi kích hoạt lại:
 
-## Why `Hasklug` and not `Hasklig`?
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
-What's in a name? The reason for the name change is to comply with the SIL Open Font License (OFL), in particular the [Reserved Font Name mechanism][SIL-RFN]
+3. Cài thư viện
 
-Some fonts have parts of their name "reserved" per the [Reserved Font Name mechanism][SIL-RFN]:
-> No Modified Version of the Font Software may use the Reserved Font
-> Name(s) unless explicit written permission is granted by the corresponding
-> Copyright Holder. This restriction only applies to the primary font name as
-> presented to the users.
+Cài các thư viện được khai báo trong requirements.txt:
 
-- The main goals seem to be to: `Avoid collisions`, `Protect authors`, `Minimize support`, and `Encourage derivatives`
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 
-See the [Reserved Font Name section][SIL-RFN] for additional information
+4. Chạy chương trình
 
-## Which font?
+Đảm bảo terminal đang ở thư mục drownsy-detect, môi trường (.venv) đã được kích hoạt và hai file mô hình best.pt vẫn còn trong thư mục runs tương ứng. Sau đó chạy:
 
-### TL;DR
+python .\DrowsinessDetector.py
 
-* Pick your font family:
-  * If you are limited to monospaced fonts (because of your terminal, etc) then pick a font with `Nerd Font Mono` (or `NFM`).
-  * If you want to have bigger icons (usually around 1.5 normal letters wide) pick a font without `Mono` i.e. `Nerd Font` (or `NF`). Most terminals support this, but ymmv.
-  * If you work in a proportional context (GUI elements or edit a presentation etc) pick a font with `Nerd Font Propo` (or `NFP`).
+5. Dừng chương trình
 
-### Ligatures
-
-Ligatures are generally preserved in the patched fonts.
-Nerd Fonts `v2.0.0` had no ligatures in the `Nerd Font Mono` fonts, this has been dropped with `v2.1.0`.
-If you have a ligature-aware terminal and don't want ligatures you can (usually) disable them in the terminal settings.
-
-### Explanation
-
-Once you narrow down your font choice of family (`Droid Sans`, `Inconsolata`, etc) and style (`bold`, `italic`, etc) you have 2 main choices:
-
-#### `Option 1: Download already patched font`
-
- * For a stable version download a font package from the [release page](https://github.com/ryanoasis/nerd-fonts/releases)
- * Or download the development version from the folders here
-
-#### `Option 2: Patch your own font`
-
- * Patch your own variations with the various options provided by the font patcher (i.e. not include all symbols for smaller font size)
-
-For more information see: [The FAQ](https://github.com/ryanoasis/nerd-fonts/wiki/FAQ-and-Troubleshooting#which-font)
-
-[SIL-RFN]:http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web_fonts_and_RFNs#14cbfd4a
-
-# drownsy-driver
-# drownsy-driver
+Kill terminal
