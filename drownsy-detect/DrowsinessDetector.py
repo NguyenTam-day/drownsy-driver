@@ -1,7 +1,9 @@
 import queue
 import threading
 import time
-import winsound
+import platform, subprocess
+if platform.system() == "Windows":
+    import winsound
 import cv2
 import numpy as np
 from ultralytics import YOLO
@@ -24,6 +26,7 @@ class DrowsinessDetector(QMainWindow):
         self.microsleeps = 0
         self.yawns = 0
         self.yawn_duration = 0 
+        self.open_frames = 0
 
         self.left_eye_still_closed = False  
         self.right_eye_still_closed = False 
@@ -69,11 +72,11 @@ class DrowsinessDetector(QMainWindow):
         
     def update_info(self):
         if round(self.yawn_duration, 2) > 7.0:
-            # self.play_sound_in_thread()
+            self.play_sound_in_thread()
             self.alert_text = "<p style='color: orange; font-weight: bold;'>⚠️ Alert: Prolonged Yawn Detected!</p>"
 
         if round(self.microsleeps, 2) > 4.0:
-            # self.play_sound_in_thread()
+            self.play_sound_in_thread()
             self.alert_text = "<p style='color: red; font-weight: bold;'>⚠️ Alert: Prolonged Microsleep Detected!</p>"
 
 
@@ -180,15 +183,18 @@ class DrowsinessDetector(QMainWindow):
                             except Exception as e:
                                 print(f"Error al realizar la predicción: {e}")
 
-                            if self.left_eye_state == "Close Eye" and self.right_eye_state == "Close Eye":
+                            both_closed = (self.left_eye_state == "Close Eye" and self.right_eye_state == "Close Eye")
+                            if both_closed:
+                                self.open_frames = 0
                                 if not self.left_eye_still_closed and not self.right_eye_still_closed:
-                                    self.left_eye_still_closed, self.right_eye_still_closed = True , True
-                                    self.blinks += 1 
+                                    self.left_eye_still_closed, self.right_eye_still_closed = True, True
+                                    self.blinks += 1
                                 self.microsleeps += 45 / 1000
                             else:
-                                if self.left_eye_still_closed and self.right_eye_still_closed :
-                                    self.left_eye_still_closed, self.right_eye_still_closed = False , False
-                                self.microsleeps = 0
+                                self.open_frames += 1
+                                if self.open_frames >= 5:          # chỉ reset sau 5 frame mở liên tiếp
+                                    self.left_eye_still_closed = self.right_eye_still_closed = False
+                                    self.microsleeps = 0
 
                             if self.yawn_state == "Yawn":
                                 if not self.yawn_in_progress:
@@ -218,9 +224,12 @@ class DrowsinessDetector(QMainWindow):
         self.video_label.setPixmap(QPixmap.fromImage(p))
 
     def play_alert_sound(self):
-            frequency = 1000 
-            duration = 500  
-            winsound.Beep(frequency, duration)
+        if platform.system() == "Windows":
+            winsound.Beep(1000, 500)
+        elif platform.system() == "Darwin":      # macOS
+            subprocess.run(["afplay", "/System/Library/Sounds/Ping.aiff"])
+        else:
+            print("\a")
 
     def play_sound_in_thread(self):
         sound_thread = threading.Thread(target=self.play_alert_sound)
