@@ -1,33 +1,26 @@
-1. Mở dự án
+Hướng dẫn khởi chạy dự án
+Bước 1. Vào thư mục chính:
 
-Giải nén file ZIP, mở thư mục dự án bằng VS Code. Mở Terminal và chuyển vào thư mục chứa chương trình:
+cd drownsy-detect
 
-cd .\drownsy-detect
+Bước 2. Tạo và kích hoạt môi trường ảo:
 
-2. Tạo và kích hoạt môi trường ảo
+Windows:
+python -m venv venv
+venv\Scripts\activate
 
-Chỉ cần tạo môi trường ảo ở lần đầu tiên:
+macOS:
+python3 -m venv venv
+source venv/bin/activate
 
-py -m venv .venv
-.\.venv\Scripts\Activate.ps1
+Bước 3. Cài thư viện:
 
-Nếu PowerShell chặn chạy script, nhập lệnh sau rồi kích hoạt lại:
+pip install -r requirements.txt
 
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+Bước 4. Chạy chương trình :
 
-3. Cài thư viện
+Windows:
+python DrowsinessDetector.py
 
-Cài các thư viện được khai báo trong requirements.txt:
-
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-
-4. Chạy chương trình
-
-Đảm bảo terminal đang ở thư mục drownsy-detect, môi trường (.venv) đã được kích hoạt và hai file mô hình best.pt vẫn còn trong thư mục runs tương ứng. Sau đó chạy:
-
-python .\DrowsinessDetector.py
-
-5. Dừng chương trình
-
-Kill terminal
+macOS:
+python3 DrowsinessDetector.py
